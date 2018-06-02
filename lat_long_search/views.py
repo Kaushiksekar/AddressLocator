@@ -21,7 +21,7 @@ def get_excel(request):
 			if not is_accepted_extension(file_name):
 				output1 = "Incorrect File extension"
 			output1 = read_excel_file(request.FILES['excel_file'])
-			return HttpResponse(str(output1))
+			return output1         
 		else:
 			output1 = "Form invalid"
 	return HttpResponse(output1)
@@ -33,12 +33,12 @@ def is_accepted_extension(file_name):
 	return False
 
 def read_excel_file(excel_file):
-	print(os.path.abspath(os.curdir))
-	local_excel_file_path = 'lat_long_search/media/sheets.xlsx'
-	with open(local_excel_file_path, 'wb+') as destination:
-		for chunk in excel_file.chunks():
-			destination.write(chunk)
-	wb = load_workbook(local_excel_file_path)
+	# print(os.path.abspath(os.curdir))
+	# local_excel_file_path = 'lat_long_search/media/sheets.xlsx'
+	# with open(local_excel_file_path, 'wb+') as destination:
+	# 	for chunk in excel_file.chunks():
+	# 		destination.write(chunk)
+	wb = load_workbook(excel_file)
 	sheet1 = wb.worksheets[0]
 	total_rows = sheet1.max_row
 	list1 = []
@@ -47,12 +47,12 @@ def read_excel_file(excel_file):
 	print(list1)
 	list1 = modify_list(list1)
 	print(list1)
-	excel_file = local_excel_file_path
+	# excel_file = local_excel_file_path
 	print("New excel_file : ", excel_file)
 	excel_file = write_excel_file(list1, excel_file)
 	# print(excel_file.name)
-	# response = download_excel(excel_file)
-	# return response
+	response = download_excel(excel_file)
+	return response
 
 def modify_list(list1):
 	return list(map(lambda x: str(x) + " - 1", list1))
@@ -63,7 +63,7 @@ def write_excel_file(list1, excel_file):
 	for i in range(len(list1)):
 		print(list1[i])
 		sheet1.cell(column=2, row=i+1).value  = list1[i]
-	wb.save("lat_long_search/media/sheets1.xlsx")
+	wb.save(excel_file)
 	wb.close()
 	return excel_file
 
