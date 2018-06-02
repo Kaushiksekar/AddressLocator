@@ -1,0 +1,6 @@
+<form action="{% url 'lat_long_search:get_excel' %}" method="post" enctype="multipart/form-data">
+{% csrf_token %}
+  <input type="file" name="excel_file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" id="excel_file">
+  <br/><br/>
+  <input type="submit">
+</form>
